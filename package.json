@@ -1,0 +1,12 @@
+{
+  "name": "demo-webapp",
+  "version": "1.0.0",
+  "description": "Application web de démonstration pour le TP1 - Automatisation & Usine Logicielle",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
