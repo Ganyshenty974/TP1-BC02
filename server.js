@@ -28,7 +28,6 @@ app.get("/", (req, res) => {
 // un code HTTP 200 si tout va bien. C'est cette route que le
 // script deploy.sh interrogera pour valider le déploiement.
 app.get("/health", (req, res) => {
-  return res.status(500).json({ status: "broken" });
   res.status(200).json({ status: "ok", version: APP_VERSION });
 });
 
