@@ -30,6 +30,6 @@ describe("GET /health", () => {
 
   it("répond avec un JSON de statut 'ok'", async () => {
     const res = await request(app).get("/health");
-    expect(res.body).toHaveProperty("status", "cassé");
+    expect(res.body).toHaveProperty("status", "ok");
   });
 });
