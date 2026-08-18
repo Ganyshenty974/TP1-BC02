@@ -4,9 +4,23 @@
   "description": "Application web de démonstration pour le TP1 - Automatisation & Usine Logicielle",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      ["jest-junit", { "outputDirectory": "reports", "outputName": "junit.xml" }]
+    ],
+    "coverageDirectory": "coverage"
   }
 }

@@ -1,0 +1,65 @@
+# .github/workflows/ci.yml
+#
+# Pipeline d'intégration continue (CI) pour demo-webapp.
+#
+# Déclenchement : à chaque push et à chaque pull request ciblant "main".
+# C'est l'automatisation demandée au TP2 : chaque modification du code
+# est automatiquement testée, sans intervention manuelle.
+#
+# Étapes du job :
+#   1. Récupération du code (checkout)
+#   2. Installation de Node.js (avec cache npm pour accélérer les runs)
+#   3. Installation des dépendances (npm ci, reproductible)
+#   4. Exécution des tests unitaires (npm test -> Jest + couverture)
+#   5. Publication d'un rapport de test lisible dans l'onglet Actions
+#   6. Archivage du rapport de couverture comme artefact téléchargeable
+
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Installation des dépendances (reproductible)
+        run: npm ci
+
+      - name: Exécution des tests unitaires
+        run: npm test
+
+      # Publie un résumé lisible des tests (succès/échecs par test)
+      # directement dans l'onglet "Actions" du dépôt, à partir du
+      # rapport JUnit généré par jest-junit.
+      - name: Publication du rapport de test
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Rapport de tests unitaires
+          path: reports/junit.xml
+          reporter: jest-junit
+
+      # Sauvegarde le rapport de couverture de code (HTML) comme
+      # artefact téléchargeable depuis la page du run.
+      - name: Archivage du rapport de couverture
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
